@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StoreOrdersActivity">
+
+    <TextView
+        android:id="@+id/OrderNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/order_phone_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.236"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/OrderNumberSpinner"
+        android:layout_width="270dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/OrderNumber"
+        app:layout_constraintTop_toBottomOf="@+id/OrderNumber"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <ListView
+        android:id="@+id/StoreOrdersPizzasList"
+        android:layout_width="375dp"
+        android:layout_height="450dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/OrderNumberSpinner" />
+
+    <TextView
+        android:id="@+id/StoreOrdersSubtotalText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/subtotal_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/StoreOrdersPizzasList" />
+
+    <TextView
+        android:id="@+id/StoreOrdersSubtotalValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/StoreOrdersSubtotalText"
+        app:layout_constraintStart_toEndOf="@+id/StoreOrdersSubtotalText"
+        app:layout_constraintTop_toTopOf="@+id/StoreOrdersSubtotalText" />
+
+    <TextView
+        android:id="@+id/StoreOrdersSalesTaxText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/sales_tax_text"
+        app:layout_constraintStart_toStartOf="@+id/StoreOrdersSubtotalText"
+        app:layout_constraintTop_toBottomOf="@+id/StoreOrdersSubtotalText" />
+
+    <TextView
+        android:id="@+id/StoreOrdersSalesTaxValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/StoreOrdersSalesTaxText"
+        app:layout_constraintStart_toStartOf="@+id/StoreOrdersSubtotalValue"
+        app:layout_constraintTop_toTopOf="@+id/StoreOrdersSalesTaxText" />
+
+    <TextView
+        android:id="@+id/StoreOrdersOrderTotalText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/order_total_text"
+        app:layout_constraintStart_toStartOf="@+id/StoreOrdersSalesTaxText"
+        app:layout_constraintTop_toBottomOf="@+id/StoreOrdersSalesTaxText" />
+
+    <TextView
+        android:id="@+id/StoreOrdersOrderTotalValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/StoreOrdersOrderTotalText"
+        app:layout_constraintStart_toStartOf="@+id/StoreOrdersSalesTaxValue"
+        app:layout_constraintTop_toTopOf="@+id/StoreOrdersOrderTotalText" />
+
+    <Button
+        android:id="@+id/CancelOrderButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="24dp"
+        android:backgroundTint="@android:color/holo_red_light"
+        android:text="@string/cancel_order"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/StoreOrdersPizzasList" />
+
+    <Button
+        android:id="@+id/ExportOrdersButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@android:color/holo_red_light"
+        android:text="@string/export_orders"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CancelOrderButton"
+        tools:ignore="TextContrastCheck" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

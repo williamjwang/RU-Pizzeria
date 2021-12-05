@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/willi/AndroidStudioProjects/Project5/app/src/main/res/layout/activity_current_order.xml" value="0.3282051282051282" />
+        <entry key="..\:/Users/willi/AndroidStudioProjects/Project5/app/src/main/res/layout/activity_main.xml" value="0.33016304347826086" />
+        <entry key="..\:/Users/willi/AndroidStudioProjects/Project5/app/src/main/res/layout/activity_pizza_customization.xml" value="0.3252136752136752" />
+        <entry key="..\:/Users/willi/AndroidStudioProjects/Project5/app/src/main/res/layout/activity_store_orders.xml" value="0.3282051282051282" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

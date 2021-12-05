@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">RU Pizzeria</string>
+    <string name="phone_number_textview">Phone Number</string>
+    <string name="add_pepperoni_button">Add Pepperoni Pizza</string>
+    <string name="add_deluxe_button">Add Deluxe Pizza</string>
+    <string name="add_hawaiian_button">Add Hawaiian Pizza</string>
+    <string name="current_order_button">Current Order Details</string>
+    <string name="store_orders_button">Store Orders Details</string>
+    <string name="add_pepperoni_text">Add Pepperoni</string>
+    <string name="add_deluxe_text">Add Deluxe</string>
+    <string name="add_hawaiian_text">Add Hawaiian</string>
+    <string name="current_order_text">Current Order</string>
+    <string name="store_orders_text">Store Orders</string>
+
+    <string name="pizza_image">Pizza Image</string>
+    <string name="select_size">Select size:</string>
+    <string name="size">Size</string>
+    <string-array name="sizes">
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+    <string name="available_toppings_text">Available Toppings</string>
+    <string-array name="available_toppings">T
+        <item>Mushrooms</item>
+        <item>Bacon</item>
+        <item>Mozzarella</item>
+        <item>Ham</item>
+        <item>Sausage</item>
+        <item>Olives</item>
+        <item>Green Peppers</item>
+        <item>Jalapenos</item>
+        <item>Chicken</item>
+        <item>Beef</item>
+    </string-array>
+    <string name="added_toppings_text">Added Toppings</string>
+    <string name="add_topping">Add Topping</string>
+    <string name="remove_topping">Remove Topping</string>
+    <string name="subtotal_text">Subtotal:</string>
+    <string name="subtotal_value_edittext">Subtotal Value</string>
+    <string name="back_to_main_menu">Main Menu</string>
+    <string name="add_pizza">Add Pizza</string>
+
+    <string name="phone_number_text">Phone Number:</string>
+    <string name="number_of_pizzas_text">Number of pizzas:</string>
+    <string name="remove_pizza">Remove Pizza</string>
+    <string name="sales_tax_text">Sales Tax:</string>
+    <string name="order_total_text">Order Total:</string>
+    <string name="place_order_text">Place Order</string>
+
+    <string name="order_phone_number">Order/Phone Number:</string>
+    <string name="cancel_order">Cancel Order</string>
+    <string name="export_orders">Export Orders</string>
+</resources>
