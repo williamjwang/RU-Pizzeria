@@ -1,12 +1,13 @@
 package com.example.project5;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * This class defines the Pepperoni data type.
  * @author William Wang, Joshua Sze
  */
-public class Pepperoni extends Pizza
+public class Pepperoni extends Pizza implements Serializable
 {
     private final int NO_ADDITIONAL_COST_PEPPERONI_LIMIT = 1;
 

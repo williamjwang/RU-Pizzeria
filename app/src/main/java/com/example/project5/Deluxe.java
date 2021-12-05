@@ -1,12 +1,13 @@
 package com.example.project5;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * This class defines the Deluxe data type.
  * @author William Wang, Joshua Sze
  */
-public class Deluxe extends Pizza
+public class Deluxe extends Pizza implements Serializable
 {
     private final int NO_ADDITIONAL_COST_DELUXE_LIMIT = 5;
 

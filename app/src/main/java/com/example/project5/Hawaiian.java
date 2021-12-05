@@ -1,12 +1,13 @@
 package com.example.project5;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * This class defines the Hawaiian data type.
  * @author William Wang, Joshua Sze
  */
-public class Hawaiian extends Pizza
+public class Hawaiian extends Pizza implements Serializable
 {
     private final int NO_ADDITIONAL_COST_HAWAIIAN_LIMIT = 2;
 

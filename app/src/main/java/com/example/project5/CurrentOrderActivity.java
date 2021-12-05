@@ -2,6 +2,7 @@ package com.example.project5;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -23,6 +24,8 @@ public class CurrentOrderActivity extends AppCompatActivity
     private DecimalFormat d = new DecimalFormat("###,##0.00");
     private static final double SALES_TAX_RATE = 0.06625;
     private static final int NOT_FOUND = -1;
+    private static final int ORDER_PLACED = 0;
+    private static final int ORDER_NOT_PLACED = 1;
 
     TextView phoneNumberValue;
     TextView numPizzasValue;
@@ -36,7 +39,7 @@ public class CurrentOrderActivity extends AppCompatActivity
     ArrayList<String> pizzaList;
     ArrayAdapter pizzaListAdapter;
 
-    int selectedPizzaIndex;
+    private int selectedPizzaIndex = -1;
 
     private void calculate()
     {
@@ -66,8 +69,8 @@ public class CurrentOrderActivity extends AppCompatActivity
         setTitle("Current Order");
 
         Intent intent = getIntent();
-        order = intent.getParcelableExtra("order");
-        storeOrders = intent.getParcelableExtra("storeOrders");
+        order = (Order) intent.getSerializableExtra("order");
+        storeOrders = (StoreOrders) intent.getSerializableExtra("storeOrders");
 
         phoneNumberValue = findViewById(R.id.PhoneNumberValue);
         numPizzasValue= findViewById(R.id.NumPizzasValue);
@@ -79,14 +82,27 @@ public class CurrentOrderActivity extends AppCompatActivity
         placeOrderButton = findViewById(R.id.PlaceOrderButton);
 
         phoneNumberValue.setText(order.getPhoneNumber());
-        numPizzasValue.setText("" + order.getNumPizzas());
         pizzaList = new ArrayList<>();
         for (int i = 0; i < order.getNumPizzas(); i++) { pizzaList.add(order.getPizza(i).toString()); }
         pizzaListAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pizzaList);
         pizzasList.setAdapter(pizzaListAdapter);
         pizzasList.setOnItemClickListener(pizzaClick);
         calculate();
+
         Toast.makeText(this, "Number of pizzas in order: " + order.getNumPizzas(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        Toast.makeText(this, "Order not placed.", Toast.LENGTH_SHORT).show();
+        Intent data = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("order", order);
+        bundle.putSerializable("storeOrders", storeOrders);
+        data.putExtras(bundle);
+        setResult(ORDER_NOT_PLACED, data);
+        super.onBackPressed();
     }
 
     private AdapterView.OnItemClickListener pizzaClick = new AdapterView.OnItemClickListener ()
@@ -97,42 +113,37 @@ public class CurrentOrderActivity extends AppCompatActivity
         }
     };
 
-    public void removePizza()
-    {
-        removePizzaButton.setOnClickListener(view ->
-        {
-            if (pizzaList.isEmpty()) return;
-            int index = selectedPizzaIndex;
-            if (index > 0)
-            {
-                order.remove(index);
-                pizzaList.remove(index);
-                pizzaListAdapter.notifyDataSetChanged();
-            }
-        });
-    }
-
     public void removePizza(View view)
     {
-        removePizza();
+        int index = selectedPizzaIndex;
+        if (index == -1) return;
+        if (index < order.getNumPizzas())
+        {
+            order.remove(index);
+            pizzaList.remove(index);
+            pizzaListAdapter.notifyDataSetChanged();
+            calculate();
+        }
     }
 
     public void placeOrder(View view)
     {
         int numPizzas = order.getNumPizzas();
-        if (numPizzas == 0) return;
-        if (storeOrders.find(order.getPhoneNumber()) == NOT_FOUND)
-        {
-            storeOrders.addOrder(order);
-            phoneNumberValue.setText("");
-            numPizzasValue.setText("");
-            subtotalTextView.setText("");
-            salesTaxTextView.setText("");
-            orderTotalTextView.setText("");
-            pizzaList.clear();
-            pizzaListAdapter.notifyDataSetChanged();
-            order = new Order();
-            finish();
-        }
+        if ((numPizzas == 0) || (storeOrders.find(order.getPhoneNumber()) != NOT_FOUND)) return;
+        storeOrders.addOrder(order);
+        phoneNumberValue.setText("");
+        numPizzasValue.setText("");
+        subtotalTextView.setText("");
+        salesTaxTextView.setText("");
+        orderTotalTextView.setText("");
+        pizzaList.clear();
+        pizzaListAdapter.notifyDataSetChanged();
+        Toast.makeText(this, "Order placed!", Toast.LENGTH_SHORT).show();
+
+        Intent data = new Intent();
+        data.putExtra("order", order);
+        data.putExtra("storeOrders", storeOrders);
+        setResult(ORDER_PLACED, data);
+        super.onBackPressed();
     }
 }

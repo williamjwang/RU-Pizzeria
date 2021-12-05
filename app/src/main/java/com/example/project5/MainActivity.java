@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -24,6 +25,9 @@ public class MainActivity extends AppCompatActivity
 
     private final int LAUNCH_CUSTOMIZATION = 0;
     private final int LAUNCH_CURRENT_ORDER = 1;
+
+    private static final int ORDER_PLACED = 0;
+    private static final int ORDER_NOT_PLACED = 1;
 
     EditText phoneNumberValue;
     ImageButton addPepperoniButton;
@@ -44,12 +48,12 @@ public class MainActivity extends AppCompatActivity
         if (phoneNumber.equals(""))
         {
             result = false;
-            Toast.makeText(this, "Please enter a phone number!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Please enter a phone number!", Toast.LENGTH_SHORT).show();
         }
         else if (storeOrders.find(phoneNumber) != NOT_FOUND)
         {
             result = false;
-            Toast.makeText(this, "Phone number match found. Please enter a different phone number.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Phone number match found. Please enter a different phone number.", Toast.LENGTH_SHORT).show();
         }
         else
         {
@@ -72,13 +76,7 @@ public class MainActivity extends AppCompatActivity
         currentOrderButton = findViewById(R.id.CurrentOrderImageButton);
         storeOrdersButton = findViewById(R.id.StoreOrdersImageButton);
 
-        addPepperoniPizzaListener();
-        addDeluxePizzaListener();
-        addHawaiianPizzaListener();
-        currentOrderListener();
-        storeOrdersListener();
-
-        Toast.makeText(this, "created", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Application started.", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -90,70 +88,65 @@ public class MainActivity extends AppCompatActivity
         {
             if (resultCode == Activity.RESULT_OK)
             {
+                currentOrder = (Order) data.getSerializableExtra("order");
                 phoneNumberValue.setText(currentOrder.getPhoneNumber());
-                ArrayList<String> pizzasToString = data.getStringArrayListExtra("pizzasToString");
-                for (int i = 0; i < pizzasToString.size(); i++)
-                {
-                    Toast.makeText(this, pizzasToString.get(i), Toast.LENGTH_SHORT).show();
-                }
-
-                //regex to rebuild added pizzas into currentOrder
-                Toast.makeText(this, "(ON ACTIVITY RESULT) Phone Number: " + currentOrder.getPhoneNumber(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(this, "(ON ACTIVITY RESULT) NUM PIZZAS IN CURRENT ORDER: " + currentOrder.getNumPizzas(), Toast.LENGTH_SHORT).show();
             }
         }
         else if (requestCode == LAUNCH_CURRENT_ORDER)
         {
-
+            if (resultCode == ORDER_PLACED)
+            {
+                newOrder();
+                Toast.makeText(this, "(ON ACTIVITY RESULT) order placed", Toast.LENGTH_SHORT).show();
+            }
+            else if (resultCode == ORDER_NOT_PLACED)
+            {
+                Toast.makeText(this, "(ON ACTIVITY RESULT) order not placed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "back works", Toast.LENGTH_SHORT).show();
+                currentOrder = (Order) data.getSerializableExtra("order");
+                storeOrders = (StoreOrders) data.getSerializableExtra("storeOrders");
+                Toast.makeText(this, "retrieval works", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
-    public void addPepperoniPizzaListener()
+
+    public void addPepperoniPizza(View view)
     {
-        addPepperoniButton.setOnClickListener(view ->
-        {
-            if (!setPhoneNumber()) return;
-            Intent intent = new Intent(this, PizzaCustomizationActivity.class);
-            intent.putExtra("pizzaType", pepperoniIndicator);
-            intent.putExtra("order", currentOrder);
-            startActivityForResult(intent, LAUNCH_CUSTOMIZATION);
-        });
+        if (!setPhoneNumber()) return;
+        Intent intent = new Intent(this, PizzaCustomizationActivity.class);
+        intent.putExtra("pizzaType", pepperoniIndicator);
+        intent.putExtra("order", currentOrder);
+        startActivityForResult(intent, LAUNCH_CUSTOMIZATION);
     }
 
-    public void addDeluxePizzaListener()
+    public void addDeluxePizza(View view)
     {
-        addDeluxeButton.setOnClickListener(view ->
-        {
-            if (!setPhoneNumber()) return;
-            Intent intent = new Intent(this, PizzaCustomizationActivity.class);
-            intent.putExtra("pizzaType", deluxeIndicator);
-            intent.putExtra("order", currentOrder);
-            startActivityForResult(intent, LAUNCH_CUSTOMIZATION);
-        });
+        if (!setPhoneNumber()) return;
+        Intent intent = new Intent(this, PizzaCustomizationActivity.class);
+        intent.putExtra("pizzaType", deluxeIndicator);
+        intent.putExtra("order", currentOrder);
+        startActivityForResult(intent, LAUNCH_CUSTOMIZATION);
     }
 
-    public void addHawaiianPizzaListener()
+    public void addHawaiianPizza(View view)
     {
-        addHawaiianButton.setOnClickListener(view ->
-        {
-            if (!setPhoneNumber()) return;
-            Intent intent = new Intent(this, PizzaCustomizationActivity.class);
-            intent.putExtra("pizzaType", hawaiianIndicator);
-            intent.putExtra("order", currentOrder);
-            startActivityForResult(intent, LAUNCH_CUSTOMIZATION);
-        });
+        if (!setPhoneNumber()) return;
+        Intent intent = new Intent(this, PizzaCustomizationActivity.class);
+        intent.putExtra("pizzaType", hawaiianIndicator);
+        intent.putExtra("order", currentOrder);
+        startActivityForResult(intent, LAUNCH_CUSTOMIZATION);
     }
 
-    public void currentOrderListener()
+    public void seeCurrentOrder(View view)
     {
-        currentOrderButton.setOnClickListener(view ->
-        {
-            if (!setPhoneNumber()) return;
-            Intent intent = new Intent(this, CurrentOrderActivity.class);
-            intent.putExtra("order", currentOrder);
-            intent.putExtra("storeOrders", storeOrders);
-            startActivityForResult(intent, LAUNCH_CURRENT_ORDER);
-        });
+        if (!setPhoneNumber()) return;
+        Intent intent = new Intent(this, CurrentOrderActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("order", currentOrder);
+        bundle.putSerializable("storeOrders", storeOrders);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, LAUNCH_CURRENT_ORDER);
     }
 
     /**
@@ -166,18 +159,15 @@ public class MainActivity extends AppCompatActivity
         else return false;
     }
 
-    public void storeOrdersListener()
+    public void seeStoreOrders(View view)
     {
-        storeOrdersButton.setOnClickListener(view ->
+        if (checkNoStoreOrders())
         {
-            if (checkNoStoreOrders())
-            {
-                String noStoreOrders = "There are no orders!";
-                Toast.makeText(this, noStoreOrders, Toast.LENGTH_LONG).show();
-                return;
-            }
-            Intent intent = new Intent(this, StoreOrdersActivity.class);
-            startActivity(intent);
-        });
+            String noStoreOrders = "There are no orders!";
+            Toast.makeText(this, noStoreOrders, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Intent intent = new Intent(this, StoreOrdersActivity.class);
+        startActivity(intent);
     }
 }

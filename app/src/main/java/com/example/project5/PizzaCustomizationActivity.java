@@ -135,8 +135,7 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         setTitle("Pizza Customization");
 
         Intent intent = getIntent();
-        order = intent.getParcelableExtra("order");
-//        Toast.makeText(this, "" + order.getPhoneNumber(), Toast.LENGTH_SHORT).show();
+        order = (Order) intent.getSerializableExtra("order");
         pizzaTypeIndicator = intent.getIntExtra("pizzaType", 0);
         pizzaImage = findViewById(R.id.PizzaImage);
         if (pizzaTypeIndicator == pepperoniIndicator) pizzaImage.setImageResource(R.drawable.pepperoni_pizza);
@@ -166,10 +165,6 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         addedToppings.setOnItemClickListener(addedToppingsClick);
 
         getSelectedSize();
-        addToppingListener();
-        removeToppingListener();
-        addToOrderListener();
-        mainMenuListener();
     }
 
     @Override
@@ -214,59 +209,46 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         }
     };
 
-    public void addToppingListener()
+    public void addTopping(View view)
     {
-        addToppingButton.setOnClickListener(view ->
+        String topping = availableListSelectedItem;
+        if (toppingCount < toppingLimit && topping != null)
         {
-            String topping = availableListSelectedItem;
-            if (toppingCount < toppingLimit && topping != null)
-            {
-                addedList.add(topping);
-                availableList.remove(topping);
-                Collections.sort(addedList);
-                availableAdapter.notifyDataSetChanged();
-                addedAdapter.notifyDataSetChanged();
-                toppingCount++;
-                availableListSelectedItem = null;
-                calculateSubtotal();
-                displaySubtotal();
-            }
-        });
+            addedList.add(topping);
+            availableList.remove(topping);
+            Collections.sort(addedList);
+            availableAdapter.notifyDataSetChanged();
+            addedAdapter.notifyDataSetChanged();
+            toppingCount++;
+            availableListSelectedItem = null;
+            calculateSubtotal();
+            displaySubtotal();
+        }
     }
 
-    public void removeToppingListener()
+    public void removeTopping(View view)
     {
-        removeToppingButton.setOnClickListener(view ->
+        String topping = addedListSelectedItem;
+        if (toppingCount > 0)
         {
-            String topping = addedListSelectedItem;
-            if (toppingCount > 0)
-            {
-                availableList.add(topping);
-                addedList.remove(topping);
-                Collections.sort(availableList);
-                availableAdapter.notifyDataSetChanged();
-                addedAdapter.notifyDataSetChanged();
-                toppingCount--;
-                addedListSelectedItem = null;
-                calculateSubtotal();
-                displaySubtotal();
-            }
-        });
+            availableList.add(topping);
+            addedList.remove(topping);
+            Collections.sort(availableList);
+            availableAdapter.notifyDataSetChanged();
+            addedAdapter.notifyDataSetChanged();
+            toppingCount--;
+            addedListSelectedItem = null;
+            calculateSubtotal();
+            displaySubtotal();
+        }
     }
 
-    public void mainMenuListener()
+    public void backToMainMenu(View view)
     {
-        mainMenuButton.setOnClickListener(view ->
-        {
-            Intent returnIntent = new Intent();
-
-            ArrayList<String> pizzasToString = new ArrayList<>();
-            for (int i = 0; i < order.getNumPizzas(); i++) { pizzasToString.add(order.getPizza(i).toString()); }
-            returnIntent.putExtra("pizzasToString", pizzasToString);
-
-            setResult(Activity.RESULT_OK, returnIntent);
-            super.onBackPressed();
-        });
+        Intent data = new Intent();
+        data.putExtra("order", order);
+        setResult(Activity.RESULT_OK, data);
+        super.onBackPressed();
     }
 
     /**
@@ -288,30 +270,27 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         else return Topping.Beef;
     }
 
-    public void addToOrderListener()
+    public void addToOrder(View view)
     {
-        addPizzaButton.setOnClickListener(view ->
+        Size size;
+        if (selectedSize.equals("Small")) size = Size.Small;
+        else if (selectedSize.equals("Medium")) size = Size.Medium;
+        else size = Size.Large;
+
+        ArrayList<Topping> toppings = new ArrayList<>();
+        for (int i = 0; i < addedList.size(); i++)
         {
-            Size size;
-            if (selectedSize.equals("Small")) size = Size.Small;
-            else if (selectedSize.equals("Medium")) size = Size.Medium;
-            else size = Size.Large;
+            String topping = addedList.get(i);
+            toppings.add(toTopping(topping));
+        }
 
-            ArrayList<Topping> toppings = new ArrayList<>();
-            for (int i = 0; i < addedList.size(); i++)
-            {
-                String topping = addedList.get(i);
-                toppings.add(toTopping(topping));
-            }
-
-            Pizza temp;
-            if (pizzaTypeIndicator == pepperoniIndicator) temp = PizzaMaker.createPizza("Pepperoni");
-            else if (pizzaTypeIndicator == deluxeIndicator) temp = PizzaMaker.createPizza("Deluxe");
-            else temp = PizzaMaker.createPizza("Hawaiian");
-            temp.setSize(size);
-            temp.setToppings(toppings);
-            order.add(temp);
-            Toast.makeText(this, "Pizza added to order.\nNumber of pizzas in order: " + order.getNumPizzas(), Toast.LENGTH_SHORT).show();
-        });
+        Pizza temp;
+        if (pizzaTypeIndicator == pepperoniIndicator) temp = PizzaMaker.createPizza("Pepperoni");
+        else if (pizzaTypeIndicator == deluxeIndicator) temp = PizzaMaker.createPizza("Deluxe");
+        else temp = PizzaMaker.createPizza("Hawaiian");
+        temp.setSize(size);
+        temp.setToppings(toppings);
+        order.add(temp);
+        Toast.makeText(this, "Pizza added to order.\nNumber of pizzas in order: " + order.getNumPizzas(), Toast.LENGTH_SHORT).show();
     }
 }

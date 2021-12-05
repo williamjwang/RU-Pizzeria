@@ -2,15 +2,16 @@ package com.example.project5;
 
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * This class defines the Pizza abstract data type.
  * @author William Wang, Joshua Sze
  */
-public abstract class Pizza
+public abstract class Pizza implements Serializable
 {
-    protected ArrayList<Topping> toppings = new ArrayList<Topping>();
+    protected ArrayList<Topping> toppings = new ArrayList<>();
     protected Size size;
 
     static final double ADDITIONAL_TOPPING_RATE = 1.49;

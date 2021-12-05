@@ -3,6 +3,7 @@ package com.example.project5;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -10,12 +11,10 @@ import java.util.ArrayList;
  * This class defines the Order data type.
  * @author William Wang, Joshua Sze
  */
-public class Order implements Parcelable
+public class Order implements Serializable
 {
     private ArrayList<Pizza> pizzas = new ArrayList<>();
     private String phoneNumber;
-
-    private static final double SALES_TAX_RATE = 0.06625;
 
     /**
      * This constructor creates a new Order object with no phone number.
@@ -27,20 +26,6 @@ public class Order implements Parcelable
      * @param phoneNumber A String phoneNumber
      */
     public Order(String phoneNumber) { this.phoneNumber = phoneNumber; }
-
-    protected Order(Parcel in)
-    {
-//        pizzas = in.readArrayList(null);
-        phoneNumber = in.readString();
-    }
-
-    public static final Creator<Order> CREATOR = new Creator<Order>() {
-        @Override
-        public Order createFromParcel(Parcel in) { return new Order(in); }
-
-        @Override
-        public Order[] newArray(int size) { return new Order[size]; }
-    };
 
     /**
      * This method sets/changes the phone number of the Order object.
@@ -104,6 +89,7 @@ public class Order implements Parcelable
      */
     public double getSalesTax()
     {
+        final double SALES_TAX_RATE = 0.06625;
         return getSubtotal() * SALES_TAX_RATE;
     }
 
@@ -114,15 +100,5 @@ public class Order implements Parcelable
     public double getOrderTotal()
     {
         return getSubtotal() + getSalesTax();
-    }
-
-    @Override
-    public int describeContents() { return 0; }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags)
-    {
-//        dest.writeList(pizzas);
-        dest.writeString(phoneNumber);
     }
 }
