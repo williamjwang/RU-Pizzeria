@@ -1,5 +1,15 @@
 <resources>
     <string name="app_name">RU Pizzeria</string>
+
+    <string name="ru_pizzeria_main">RU Pizzeria (Main Activity)</string>
+    <string name="pizza_customization">Pizza Customization</string>
+    <string name="current_order">Current Order</string>
+    <string name="store_orders">Store Orders</string>
+
+    <string name="order">order</string>
+    <string name="storeOrders">storeOrders</string>
+    <string name="pizzaType">pizzaType</string>
+
     <string name="phone_number_textview">Phone Number</string>
     <string name="add_pepperoni_button">Add Pepperoni Pizza</string>
     <string name="add_deluxe_button">Add Deluxe Pizza</string>
@@ -51,4 +61,33 @@
     <string name="order_phone_number">Order/Phone Number:</string>
     <string name="cancel_order">Cancel Order</string>
     <string name="export_orders">Export Orders</string>
+
+    <string name="application_start">Application started.</string>
+    <string name="enter_phone_number">Please enter a phone number!</string>
+    <string name="enter_different_phone_number">Phone number match found, enter a different phone number.</string>
+    <string name="no_orders">There are no orders!</string>
+
+    <string name="pepperoni">Pepperoni</string>
+    <string name="deluxe">Deluxe</string>
+    <string name="hawaiian">Hawaiian</string>
+
+    <string name="small">Small</string>
+    <string name="medium">Medium</string>
+    <string name="large">Large</string>
+    <string name="mushrooms">Mushrooms</string>
+    <string name="bacon">Bacon</string>
+    <string name="mozzarella">Mozzarella</string>
+    <string name="ham">Ham</string>
+    <string name="sausage">Sausage</string>
+    <string name="olives">Olives</string>
+    <string name="green_peppers">Green Peppers</string>
+    <string name="jalapenos">Jalapenos</string>
+    <string name="chicken">Chicken</string>
+    <string name="beef">Beef</string>
+
+    <string name="pizza_added">Pizza added to order.</string>
+    <string name="order_placed">Order placed!</string>
+
+    <string name="order_removed_part1">Order \'</string>
+    <string name="order_removed_part2">\' successfully removed.</string>
 </resources>

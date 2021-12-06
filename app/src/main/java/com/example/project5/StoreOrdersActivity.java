@@ -83,11 +83,11 @@ public class StoreOrdersActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_orders);
-        setTitle("Store Orders");
+        setTitle(getString(R.string.store_orders));
 
         Intent intent = getIntent();
-        order = (Order) intent.getSerializableExtra("order");
-        storeOrders = (StoreOrders) intent.getSerializableExtra("storeOrders");
+        order = (Order) intent.getSerializableExtra(getString(R.string.order));
+        storeOrders = (StoreOrders) intent.getSerializableExtra(getString(R.string.storeOrders));
 
         orderNumberSpinner = findViewById(R.id.OrderNumberSpinner);
         pizzasList = findViewById(R.id.StoreOrdersPizzasList);
@@ -121,8 +121,8 @@ public class StoreOrdersActivity extends AppCompatActivity
     {
         Intent data = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("order", order);
-        bundle.putSerializable("storeOrders", storeOrders);
+        bundle.putSerializable(getString(R.string.order), order);
+        bundle.putSerializable(getString(R.string.storeOrders), storeOrders);
         data.putExtras(bundle);
         setResult(Activity.RESULT_OK, data);
         super.onBackPressed();
@@ -153,6 +153,9 @@ public class StoreOrdersActivity extends AppCompatActivity
     {
         int index = storeOrders.find(selectedPhoneNumber);
         storeOrders.removeOrder(index);
+        Toast.makeText(this,
+                getString(R.string.order_removed_part1) + selectedPhoneNumber + getString(R.string.order_removed_part2),
+                Toast.LENGTH_SHORT).show();
         if (storeOrders.getNumOrders() != 0)
         {
             phoneNumberList.remove(selectedPhoneNumber);
@@ -161,17 +164,14 @@ public class StoreOrdersActivity extends AppCompatActivity
             setPizzasList(0);
             calculate(0);
             pizzasListAdapter.notifyDataSetChanged();
-            String orderRemoved = "Order '" + selectedPhoneNumber + "' successfully removed.";
-            Toast.makeText(this, orderRemoved, Toast.LENGTH_SHORT).show();
         }
         else
         {
-            String noOrders = "There are no orders!";
-            Toast.makeText(this, noOrders, Toast.LENGTH_SHORT);
+            Toast.makeText(this, getString(R.string.no_orders), Toast.LENGTH_SHORT);
             Intent data = new Intent();
             Bundle bundle = new Bundle();
-            bundle.putSerializable("order", order);
-            bundle.putSerializable("storeOrders", storeOrders);
+            bundle.putSerializable(getString(R.string.order), order);
+            bundle.putSerializable(getString(R.string.storeOrders), storeOrders);
             data.putExtras(bundle);
             setResult(Activity.RESULT_OK, data);
             super.onBackPressed();

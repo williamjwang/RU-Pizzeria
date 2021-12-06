@@ -51,14 +51,12 @@ public class MainActivity extends AppCompatActivity
         if (phoneNumber.equals(""))
         {
             result = false;
-            String enterPhoneNumber = "Please enter a phone number!";
-            Toast.makeText(this, enterPhoneNumber, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.enter_phone_number), Toast.LENGTH_SHORT).show();
         }
         else if (storeOrders.find(phoneNumber) != NOT_FOUND)
         {
             result = false;
-            String enterDifferentPhoneNumber = "Phone number match found, enter a different phone number.";
-            Toast.makeText(this, enterDifferentPhoneNumber, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.enter_different_phone_number), Toast.LENGTH_SHORT).show();
         }
         else
         {
@@ -77,6 +75,7 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle(getString(R.string.ru_pizzeria_main));
 
         phoneNumberValue = findViewById(R.id.PhoneNumber);
         addPepperoniButton = findViewById(R.id.AddPepperoniImageButton);
@@ -85,8 +84,7 @@ public class MainActivity extends AppCompatActivity
         currentOrderButton = findViewById(R.id.CurrentOrderImageButton);
         storeOrdersButton = findViewById(R.id.StoreOrdersImageButton);
 
-        String applicationStart = "Application started.";
-        Toast.makeText(this, applicationStart, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.application_start), Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -100,8 +98,8 @@ public class MainActivity extends AppCompatActivity
     {
         super.onActivityResult(requestCode, resultCode, data);
 
-        currentOrder = (Order) data.getSerializableExtra("order");
-        storeOrders = (StoreOrders) data.getSerializableExtra("storeOrders");
+        currentOrder = (Order) data.getSerializableExtra(getString(R.string.order));
+        storeOrders = (StoreOrders) data.getSerializableExtra(getString(R.string.storeOrders));
         phoneNumberValue.setText(currentOrder.getPhoneNumber());
 
         if ((requestCode == LAUNCH_CURRENT_ORDER) && (resultCode == ORDER_PLACED))
@@ -120,9 +118,9 @@ public class MainActivity extends AppCompatActivity
         if (!setPhoneNumber()) return;
         Intent intent = new Intent(this, PizzaCustomizationActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putInt("pizzaType", pepperoniIndicator);
-        bundle.putSerializable("order", currentOrder);
-        bundle.putSerializable("storeOrders", storeOrders);
+        bundle.putInt(getString(R.string.pizzaType), pepperoniIndicator);
+        bundle.putSerializable(getString(R.string.order), currentOrder);
+        bundle.putSerializable(getString(R.string.storeOrders), storeOrders);
         intent.putExtras(bundle);
         startActivityForResult(intent, LAUNCH_CUSTOMIZATION);
     }
@@ -136,9 +134,9 @@ public class MainActivity extends AppCompatActivity
         if (!setPhoneNumber()) return;
         Intent intent = new Intent(this, PizzaCustomizationActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putInt("pizzaType", deluxeIndicator);
-        bundle.putSerializable("order", currentOrder);
-        bundle.putSerializable("storeOrders", storeOrders);
+        bundle.putInt(getString(R.string.pizzaType), deluxeIndicator);
+        bundle.putSerializable(getString(R.string.order), currentOrder);
+        bundle.putSerializable(getString(R.string.storeOrders), storeOrders);
         intent.putExtras(bundle);
         startActivityForResult(intent, LAUNCH_CUSTOMIZATION);
     }
@@ -152,9 +150,9 @@ public class MainActivity extends AppCompatActivity
         if (!setPhoneNumber()) return;
         Intent intent = new Intent(this, PizzaCustomizationActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putInt("pizzaType", hawaiianIndicator);
-        bundle.putSerializable("order", currentOrder);
-        bundle.putSerializable("storeOrders", storeOrders);
+        bundle.putInt(getString(R.string.pizzaType), hawaiianIndicator);
+        bundle.putSerializable(getString(R.string.order), currentOrder);
+        bundle.putSerializable(getString(R.string.storeOrders), storeOrders);
         intent.putExtras(bundle);
         startActivityForResult(intent, LAUNCH_CUSTOMIZATION);
     }
@@ -168,8 +166,8 @@ public class MainActivity extends AppCompatActivity
         if (!setPhoneNumber()) return;
         Intent intent = new Intent(this, CurrentOrderActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("order", currentOrder);
-        bundle.putSerializable("storeOrders", storeOrders);
+        bundle.putSerializable(getString(R.string.order), currentOrder);
+        bundle.putSerializable(getString(R.string.storeOrders), storeOrders);
         intent.putExtras(bundle);
         startActivityForResult(intent, LAUNCH_CURRENT_ORDER);
     }
@@ -192,14 +190,13 @@ public class MainActivity extends AppCompatActivity
     {
         if (checkNoStoreOrders())
         {
-            final String noStoreOrders = "There are no orders!";
-            Toast.makeText(this, noStoreOrders, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_orders), Toast.LENGTH_SHORT).show();
             return;
         }
         Intent intent = new Intent(this, StoreOrdersActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("order", currentOrder);
-        bundle.putSerializable("storeOrders", storeOrders);
+        bundle.putSerializable(getString(R.string.order), currentOrder);
+        bundle.putSerializable(getString(R.string.storeOrders), storeOrders);
         intent.putExtras(bundle);
         startActivityForResult(intent, LAUNCH_STORE_ORDERS);
     }

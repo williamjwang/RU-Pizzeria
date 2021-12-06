@@ -37,7 +37,8 @@ public class PizzaCustomizationActivity extends AppCompatActivity
     private final double ADDITIONAL_TOPPING_RATE = 1.49;
     private DecimalFormat d = new DecimalFormat("###,##0.00");
 
-    private static final int toppingLimit = 7;
+    private static final int toppingMin = 0;
+    private static final int toppingMax = 7;
     private int toppingCount = 0;
 
     private int pizzaTypeIndicator;
@@ -65,9 +66,9 @@ public class PizzaCustomizationActivity extends AppCompatActivity
      */
     private void calculatePepperoniSubtotal()
     {
-        if (selectedSize.equals("Small")) cost = 8.99;
-        else if (selectedSize.equals("Medium")) cost = 10.99;
-        else if (selectedSize.equals("Large")) cost = 12.99;
+        if (selectedSize.equals(getString(R.string.small))) cost = 8.99;
+        else if (selectedSize.equals(getString(R.string.medium))) cost = 10.99;
+        else if (selectedSize.equals(getString(R.string.large))) cost = 12.99;
         if (toppingCount >= NO_ADDITIONAL_COST_PEPPERONI_LIMIT)
         {
             cost += (toppingCount - NO_ADDITIONAL_COST_PEPPERONI_LIMIT) * ADDITIONAL_TOPPING_RATE;
@@ -79,9 +80,9 @@ public class PizzaCustomizationActivity extends AppCompatActivity
      */
     private void calculateDeluxeSubtotal()
     {
-        if (selectedSize.equals("Small")) cost = 12.99;
-        else if (selectedSize.equals("Medium")) cost = 14.99;
-        else if (selectedSize.equals("Large")) cost = 16.99;
+        if (selectedSize.equals(getString(R.string.small))) cost = 12.99;
+        else if (selectedSize.equals(getString(R.string.medium))) cost = 14.99;
+        else if (selectedSize.equals(getString(R.string.large))) cost = 16.99;
         if (toppingCount >= NO_ADDITIONAL_COST_DELUXE_LIMIT)
         {
             cost += (toppingCount - NO_ADDITIONAL_COST_DELUXE_LIMIT) * ADDITIONAL_TOPPING_RATE;
@@ -93,9 +94,9 @@ public class PizzaCustomizationActivity extends AppCompatActivity
      */
     private void calculateHawaiianSubtotal()
     {
-        if (selectedSize.equals("Small")) cost = 10.99;
-        else if (selectedSize.equals("Medium")) cost = 12.99;
-        else if (selectedSize.equals("Large")) cost = 14.99;
+        if (selectedSize.equals(getString(R.string.small))) cost = 10.99;
+        else if (selectedSize.equals(getString(R.string.medium))) cost = 12.99;
+        else if (selectedSize.equals(getString(R.string.large))) cost = 14.99;
         if (toppingCount >= NO_ADDITIONAL_COST_HAWAIIAN_LIMIT)
         {
             cost += (toppingCount - NO_ADDITIONAL_COST_HAWAIIAN_LIMIT) * ADDITIONAL_TOPPING_RATE;
@@ -137,16 +138,16 @@ public class PizzaCustomizationActivity extends AppCompatActivity
      */
     private void initializeAvailableToppings()
     {
-        availableList.add("Mushrooms");
-        availableList.add("Bacon");
-        availableList.add("Mozzarella");
-        availableList.add("Ham");
-        availableList.add("Sausage");
-        availableList.add("Olives");
-        availableList.add("Green Peppers");
-        availableList.add("Jalapenos");
-        availableList.add("Chicken");
-        availableList.add("Beef");
+        availableList.add(getString(R.string.mushrooms));
+        availableList.add(getString(R.string.bacon));
+        availableList.add(getString(R.string.mozzarella));
+        availableList.add(getString(R.string.ham));
+        availableList.add(getString(R.string.sausage));
+        availableList.add(getString(R.string.olives));
+        availableList.add(getString(R.string.green_peppers));
+        availableList.add(getString(R.string.jalapenos));
+        availableList.add(getString(R.string.chicken));
+        availableList.add(getString(R.string.beef));
         Collections.sort(availableList);
     }
 
@@ -159,12 +160,12 @@ public class PizzaCustomizationActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pizza_customization);
-        setTitle("Pizza Customization");
+        setTitle(getString(R.string.pizza_customization));
 
         Intent intent = getIntent();
-        order = (Order) intent.getSerializableExtra("order");
-        storeOrders = (StoreOrders) intent.getSerializableExtra("storeOrders");
-        pizzaTypeIndicator = intent.getIntExtra("pizzaType", 0);
+        order = (Order) intent.getSerializableExtra(getString(R.string.order));
+        storeOrders = (StoreOrders) intent.getSerializableExtra(getString(R.string.storeOrders));
+        pizzaTypeIndicator = intent.getIntExtra(getString(R.string.pizzaType), 0);
         pizzaImage = findViewById(R.id.PizzaImage);
         if (pizzaTypeIndicator == pepperoniIndicator) pizzaImage.setImageResource(R.drawable.pepperoni_pizza);
         else if (pizzaTypeIndicator == deluxeIndicator) pizzaImage.setImageResource(R.drawable.deluxe_pizza);
@@ -201,8 +202,8 @@ public class PizzaCustomizationActivity extends AppCompatActivity
     {
         Intent data = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("order", order);
-        bundle.putSerializable("storeOrders", storeOrders);
+        bundle.putSerializable(getString(R.string.order), order);
+        bundle.putSerializable(getString(R.string.storeOrders), storeOrders);
         data.putExtras(bundle);
         setResult(Activity.RESULT_OK, data);
         super.onBackPressed();
@@ -254,7 +255,7 @@ public class PizzaCustomizationActivity extends AppCompatActivity
     public void addTopping(View view)
     {
         String topping = availableListSelectedItem;
-        if (toppingCount < toppingLimit && topping != null)
+        if (toppingCount < toppingMax && topping != null)
         {
             addedList.add(topping);
             availableList.remove(topping);
@@ -275,7 +276,7 @@ public class PizzaCustomizationActivity extends AppCompatActivity
     public void removeTopping(View view)
     {
         String topping = addedListSelectedItem;
-        if (toppingCount > 0 && topping != null)
+        if (toppingCount > toppingMin && topping != null)
         {
             availableList.add(topping);
             addedList.remove(topping);
@@ -296,15 +297,15 @@ public class PizzaCustomizationActivity extends AppCompatActivity
      */
     private Topping toTopping(String topping)
     {
-        if (topping.equals("Mushrooms")) return Topping.Mushrooms;
-        else if (topping.equals("Bacon")) return Topping.Bacon;
-        else if (topping.equals("Mozzarella")) return Topping.Mozzarella;
-        else if (topping.equals("Ham")) return Topping.Ham;
-        else if (topping.equals("Sausage")) return Topping.Sausage;
-        else if (topping.equals("Olives")) return Topping.Olives;
-        else if (topping.equals("Green Peppers")) return Topping.Green_Peppers;
-        else if (topping.equals("Jalapenos")) return Topping.Jalapenos;
-        else if (topping.equals("Chicken")) return Topping.Chicken;
+        if (topping.equals(getString(R.string.mushrooms))) return Topping.Mushrooms;
+        else if (topping.equals(getString(R.string.bacon))) return Topping.Bacon;
+        else if (topping.equals(getString(R.string.mozzarella))) return Topping.Mozzarella;
+        else if (topping.equals(getString(R.string.ham))) return Topping.Ham;
+        else if (topping.equals(getString(R.string.sausage))) return Topping.Sausage;
+        else if (topping.equals(getString(R.string.olives))) return Topping.Olives;
+        else if (topping.equals(getString(R.string.green_peppers))) return Topping.Green_Peppers;
+        else if (topping.equals(getString(R.string.jalapenos))) return Topping.Jalapenos;
+        else if (topping.equals(getString(R.string.chicken))) return Topping.Chicken;
         else return Topping.Beef;
     }
 
@@ -315,8 +316,8 @@ public class PizzaCustomizationActivity extends AppCompatActivity
     public void addToOrder(View view)
     {
         Size size;
-        if (selectedSize.equals("Small")) size = Size.Small;
-        else if (selectedSize.equals("Medium")) size = Size.Medium;
+        if (selectedSize.equals(getString(R.string.small))) size = Size.Small;
+        else if (selectedSize.equals(getString(R.string.medium))) size = Size.Medium;
         else size = Size.Large;
 
         ArrayList<Topping> toppings = new ArrayList<>();
@@ -327,13 +328,12 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         }
 
         Pizza temp;
-        if (pizzaTypeIndicator == pepperoniIndicator) temp = PizzaMaker.createPizza("Pepperoni");
-        else if (pizzaTypeIndicator == deluxeIndicator) temp = PizzaMaker.createPizza("Deluxe");
-        else temp = PizzaMaker.createPizza("Hawaiian");
+        if (pizzaTypeIndicator == pepperoniIndicator) temp = PizzaMaker.createPizza(getString(R.string.pepperoni));
+        else if (pizzaTypeIndicator == deluxeIndicator) temp = PizzaMaker.createPizza(getString(R.string.deluxe));
+        else temp = PizzaMaker.createPizza(getString(R.string.hawaiian));
         temp.setSize(size);
         temp.setToppings(toppings);
         order.add(temp);
-        String pizzaAdded = "Pizza added to order.";
-        Toast.makeText(this, pizzaAdded, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.pizza_added), Toast.LENGTH_SHORT).show();
     }
 }

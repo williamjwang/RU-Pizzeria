@@ -73,11 +73,11 @@ public class CurrentOrderActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_current_order);
-        setTitle("Current Order");
+        setTitle(getString(R.string.current_order));
 
         Intent intent = getIntent();
-        order = (Order) intent.getSerializableExtra("order");
-        storeOrders = (StoreOrders) intent.getSerializableExtra("storeOrders");
+        order = (Order) intent.getSerializableExtra(getString(R.string.order));
+        storeOrders = (StoreOrders) intent.getSerializableExtra(getString(R.string.storeOrders));
 
         phoneNumberValue = findViewById(R.id.PhoneNumberValue);
         numPizzasValue= findViewById(R.id.NumPizzasValue);
@@ -105,8 +105,8 @@ public class CurrentOrderActivity extends AppCompatActivity
     {
         Intent data = new Intent();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("order", order);
-        bundle.putSerializable("storeOrders", storeOrders);
+        bundle.putSerializable(getString(R.string.order), order);
+        bundle.putSerializable(getString(R.string.storeOrders), storeOrders);
         data.putExtras(bundle);
         setResult(ORDER_NOT_PLACED, data);
         super.onBackPressed();
@@ -156,12 +156,11 @@ public class CurrentOrderActivity extends AppCompatActivity
         orderTotalTextView.setText("");
         pizzaList.clear();
         pizzaListAdapter.notifyDataSetChanged();
-        String orderPlaced = "Order placed!";
-        Toast.makeText(this, orderPlaced, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.order_placed), Toast.LENGTH_SHORT).show();
 
         Intent data = new Intent();
-        data.putExtra("order", order);
-        data.putExtra("storeOrders", storeOrders);
+        data.putExtra(getString(R.string.order), order);
+        data.putExtra(getString(R.string.storeOrders), storeOrders);
         setResult(ORDER_PLACED, data);
         super.onBackPressed();
     }
