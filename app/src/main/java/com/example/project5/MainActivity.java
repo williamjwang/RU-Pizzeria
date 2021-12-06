@@ -1,18 +1,17 @@
 package com.example.project5;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
+/**
+ * This class defines the MainActivity of the RU Pizzeria application.
+ * @author William Wang, Joshua Sze
+ */
 public class MainActivity extends AppCompatActivity
 {
     private StoreOrders storeOrders = new StoreOrders();
@@ -28,7 +27,6 @@ public class MainActivity extends AppCompatActivity
     private final int LAUNCH_STORE_ORDERS = 2;
 
     private static final int ORDER_PLACED = 0;
-    private static final int ORDER_NOT_PLACED = 1;
 
     EditText phoneNumberValue;
     ImageButton addPepperoniButton;
@@ -42,6 +40,10 @@ public class MainActivity extends AppCompatActivity
      */
     public void newOrder() { currentOrder = new Order(); }
 
+    /**
+     * This method sets the phone number being interacted with.
+     * @return A boolean describing whether the phone number has been successfully set.
+     */
     private boolean setPhoneNumber()
     {
         boolean result = true;
@@ -49,12 +51,14 @@ public class MainActivity extends AppCompatActivity
         if (phoneNumber.equals(""))
         {
             result = false;
-            Toast.makeText(this, "Please enter a phone number!", Toast.LENGTH_SHORT).show();
+            String enterPhoneNumber = "Please enter a phone number!";
+            Toast.makeText(this, enterPhoneNumber, Toast.LENGTH_SHORT).show();
         }
         else if (storeOrders.find(phoneNumber) != NOT_FOUND)
         {
             result = false;
-            Toast.makeText(this, "Phone number match found, enter a different phone number.", Toast.LENGTH_SHORT).show();
+            String enterDifferentPhoneNumber = "Phone number match found, enter a different phone number.";
+            Toast.makeText(this, enterDifferentPhoneNumber, Toast.LENGTH_SHORT).show();
         }
         else
         {
@@ -64,6 +68,10 @@ public class MainActivity extends AppCompatActivity
         return result;
     }
 
+    /**
+     * This method defines the onCreate method performed when this activity is created.
+     * @param savedInstanceState A Bundle object
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -77,9 +85,16 @@ public class MainActivity extends AppCompatActivity
         currentOrderButton = findViewById(R.id.CurrentOrderImageButton);
         storeOrdersButton = findViewById(R.id.StoreOrdersImageButton);
 
-        Toast.makeText(this, "Application started.", Toast.LENGTH_SHORT).show();
+        String applicationStart = "Application started.";
+        Toast.makeText(this, applicationStart, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * This method defines the actions to be performed after the activity is returned to.
+     * @param requestCode An int
+     * @param resultCode An int
+     * @param data An Intent object
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -87,21 +102,19 @@ public class MainActivity extends AppCompatActivity
 
         currentOrder = (Order) data.getSerializableExtra("order");
         storeOrders = (StoreOrders) data.getSerializableExtra("storeOrders");
+        phoneNumberValue.setText(currentOrder.getPhoneNumber());
 
-        if (requestCode == LAUNCH_CUSTOMIZATION) phoneNumberValue.setText(currentOrder.getPhoneNumber());
-        else if (requestCode == LAUNCH_CURRENT_ORDER)
+        if ((requestCode == LAUNCH_CURRENT_ORDER) && (resultCode == ORDER_PLACED))
         {
-            if (resultCode == ORDER_PLACED)
-            {
-                newOrder();
-                phoneNumberValue.setText("");
-            }
-            else if (resultCode == ORDER_NOT_PLACED) phoneNumberValue.setText(currentOrder.getPhoneNumber());
+            newOrder();
+            phoneNumberValue.setText("");
         }
-        else if (requestCode == LAUNCH_STORE_ORDERS);
     }
 
-
+    /**
+     * This method calls the PizzaCustomization activity to add customized Pepperoni pizzas.
+     * @param view A View object
+     */
     public void addPepperoniPizza(View view)
     {
         if (!setPhoneNumber()) return;
@@ -114,6 +127,10 @@ public class MainActivity extends AppCompatActivity
         startActivityForResult(intent, LAUNCH_CUSTOMIZATION);
     }
 
+    /**
+     * This method calls the PizzaCustomization activity to add customized Deluxe pizzas.
+     * @param view A View object
+     */
     public void addDeluxePizza(View view)
     {
         if (!setPhoneNumber()) return;
@@ -126,6 +143,10 @@ public class MainActivity extends AppCompatActivity
         startActivityForResult(intent, LAUNCH_CUSTOMIZATION);
     }
 
+    /**
+     * This method calls the PizzaCustomization activity to add customized Hawaiian pizzas.
+     * @param view A View object
+     */
     public void addHawaiianPizza(View view)
     {
         if (!setPhoneNumber()) return;
@@ -138,6 +159,10 @@ public class MainActivity extends AppCompatActivity
         startActivityForResult(intent, LAUNCH_CUSTOMIZATION);
     }
 
+    /**
+     * This method calls the CurrentOrder activity to see the details of the current order.
+     * @param view A View object
+     */
     public void seeCurrentOrder(View view)
     {
         if (!setPhoneNumber()) return;
@@ -159,11 +184,15 @@ public class MainActivity extends AppCompatActivity
         else return false;
     }
 
+    /**
+     * This method calls the StoreOrders activity to see the details of all store orders.
+     * @param view A View object
+     */
     public void seeStoreOrders(View view)
     {
         if (checkNoStoreOrders())
         {
-            String noStoreOrders = "There are no orders!";
+            final String noStoreOrders = "There are no orders!";
             Toast.makeText(this, noStoreOrders, Toast.LENGTH_SHORT).show();
             return;
         }

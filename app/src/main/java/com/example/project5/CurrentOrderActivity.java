@@ -13,6 +13,10 @@ import android.widget.Toast;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+/**
+ * This class defines the CurrentOrderActivity of the RU Pizzeria application.
+ * @author William Wang, Joshua Sze
+ */
 public class CurrentOrderActivity extends AppCompatActivity
 {
     private Order order;
@@ -38,6 +42,9 @@ public class CurrentOrderActivity extends AppCompatActivity
 
     private int selectedPizzaIndex = -1;
 
+    /**
+     * This method calculates/updates the subtotal, sales tax, and order total of the current order and displays them.
+     */
     private void calculate()
     {
         int numPizzas = order.getNumPizzas();
@@ -57,6 +64,10 @@ public class CurrentOrderActivity extends AppCompatActivity
         if (orderTotal > 0) orderTotalTextView.setText("$" + d.format(orderTotal));
     }
 
+    /**
+     * This method defines the onCreate method performed when this activity is created.
+     * @param savedInstanceState A Bundle object
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -86,6 +97,9 @@ public class CurrentOrderActivity extends AppCompatActivity
         calculate();
     }
 
+    /**
+     * This method defines the behavior of this Activity after the back button is pressed.
+     */
     @Override
     public void onBackPressed()
     {
@@ -98,6 +112,9 @@ public class CurrentOrderActivity extends AppCompatActivity
         super.onBackPressed();
     }
 
+    /**
+     * This Listener checks for changes in the pizza selected.
+     */
     private AdapterView.OnItemClickListener pizzaClick = new AdapterView.OnItemClickListener ()
     {
         public void onItemClick(AdapterView parent, View v, int position, long id)
@@ -106,6 +123,10 @@ public class CurrentOrderActivity extends AppCompatActivity
         }
     };
 
+    /**
+     * This method removes the last selected pizza from the order.
+     * @param view A View object
+     */
     public void removePizza(View view)
     {
         int index = selectedPizzaIndex;
@@ -119,6 +140,10 @@ public class CurrentOrderActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * This method places the order into the store orders.
+     * @param view A View object
+     */
     public void placeOrder(View view)
     {
         int numPizzas = order.getNumPizzas();
@@ -131,7 +156,8 @@ public class CurrentOrderActivity extends AppCompatActivity
         orderTotalTextView.setText("");
         pizzaList.clear();
         pizzaListAdapter.notifyDataSetChanged();
-        Toast.makeText(this, "Order placed!", Toast.LENGTH_SHORT).show();
+        String orderPlaced = "Order placed!";
+        Toast.makeText(this, orderPlaced, Toast.LENGTH_SHORT).show();
 
         Intent data = new Intent();
         data.putExtra("order", order);

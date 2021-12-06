@@ -1,7 +1,6 @@
 package com.example.project5;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -19,6 +17,10 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * This class defines the PizzaCustomizationActivity of the RU Pizzeria application.
+ * @author William Wang, Joshua Sze
+ */
 public class PizzaCustomizationActivity extends AppCompatActivity
 {
     private Order order;
@@ -58,6 +60,9 @@ public class PizzaCustomizationActivity extends AppCompatActivity
     String availableListSelectedItem;
     String addedListSelectedItem;
 
+    /**
+     * This method calculates the subtotal of a Pepperoni pizza.
+     */
     private void calculatePepperoniSubtotal()
     {
         if (selectedSize.equals("Small")) cost = 8.99;
@@ -69,6 +74,9 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * This method calculates the subtotal of a Deluxe pizza.
+     */
     private void calculateDeluxeSubtotal()
     {
         if (selectedSize.equals("Small")) cost = 12.99;
@@ -80,6 +88,9 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * This method calculates the subtotal of a Hawaiian pizza.
+     */
     private void calculateHawaiianSubtotal()
     {
         if (selectedSize.equals("Small")) cost = 10.99;
@@ -91,6 +102,9 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * This method calculates the subtotal of a pizza, depending on the type.
+     */
     protected void calculateSubtotal()
     {
         if (pizzaTypeIndicator == pepperoniIndicator) calculatePepperoniSubtotal();
@@ -98,6 +112,9 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         else if (pizzaTypeIndicator == hawaiianIndicator) calculateHawaiianSubtotal();
     }
 
+    /**
+     * This method gets the size selected.
+     */
     protected void getSelectedSize()
     {
         selectedSize = sizeSpinner.getSelectedItem().toString();
@@ -105,6 +122,9 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         displaySubtotal();
     }
 
+    /**
+     * This method changes the subtotal displayed.
+     */
     private void displaySubtotal()
     {
         subtotalValue.setText("");
@@ -112,6 +132,9 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         subtotalValue.setText("$" + d.format(cost));
     }
 
+    /**
+     * This method initializes the availableList of toppings.
+     */
     private void initializeAvailableToppings()
     {
         availableList.add("Mushrooms");
@@ -127,6 +150,10 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         Collections.sort(availableList);
     }
 
+    /**
+     * This method defines the onCreate method performed when this activity is created.
+     * @param savedInstanceState A Bundle object
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -149,7 +176,6 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         availableAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, availableList);
         addedAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, addedList);
 
-
         sizeSpinner = findViewById(R.id.SizeSpinner);
         availableToppings = findViewById(R.id.AvailableToppingsList);
         addedToppings = findViewById(R.id.AddedToppingsList);
@@ -167,6 +193,9 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         getSelectedSize();
     }
 
+    /**
+     * This method defines the behavior of this Activity after the back button is pressed.
+     */
     @Override
     public void onBackPressed()
     {
@@ -179,6 +208,9 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         super.onBackPressed();
     }
 
+    /**
+     * This Listener checks for changes in the size selected.
+     */
     private AdapterView.OnItemSelectedListener sizeClick = new AdapterView.OnItemSelectedListener()
     {
         @Override
@@ -190,12 +222,12 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         }
 
         @Override
-        public void onNothingSelected(AdapterView<?> parent)
-        {
-
-        }
+        public void onNothingSelected(AdapterView<?> parent) { }
     };
 
+    /**
+     * This Listener checks and updates the most recent topping selected in the availableToppings ListView.
+     */
     private AdapterView.OnItemClickListener availableToppingsClick = new AdapterView.OnItemClickListener ()
     {
         public void onItemClick(AdapterView parent, View v, int position, long id)
@@ -204,6 +236,9 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         }
     };
 
+    /**
+     * This Listener checks and updates the most recent topping selected in the addedToppings ListView.
+     */
     private AdapterView.OnItemClickListener addedToppingsClick = new AdapterView.OnItemClickListener ()
     {
         public void onItemClick(AdapterView parent, View v, int position, long id)
@@ -212,6 +247,10 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         }
     };
 
+    /**
+     * This method adds the most recent topping selected in the availableToppings ListView to the addedToppings ListView.
+     * @param view A View object
+     */
     public void addTopping(View view)
     {
         String topping = availableListSelectedItem;
@@ -229,6 +268,10 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * This method adds the most recent topping selected in the addedToppings ListView to the availableToppings ListView.
+     * @param view A View object
+     */
     public void removeTopping(View view)
     {
         String topping = addedListSelectedItem;
@@ -265,6 +308,10 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         else return Topping.Beef;
     }
 
+    /**
+     * This method adds a customized Pizza to the order.
+     * @param view A View objects
+     */
     public void addToOrder(View view)
     {
         Size size;
@@ -286,6 +333,7 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         temp.setSize(size);
         temp.setToppings(toppings);
         order.add(temp);
-        Toast.makeText(this, "Pizza added to order.\nNumber of pizzas in order: " + order.getNumPizzas(), Toast.LENGTH_SHORT).show();
+        String pizzaAdded = "Pizza added to order.";
+        Toast.makeText(this, pizzaAdded, Toast.LENGTH_SHORT).show();
     }
 }

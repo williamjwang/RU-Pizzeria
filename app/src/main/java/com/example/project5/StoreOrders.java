@@ -1,13 +1,6 @@
 package com.example.project5;
 
-//import javafx.stage.FileChooser;
-//import javafx.stage.Stage;
-
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -18,6 +11,9 @@ public class StoreOrders implements Serializable
 {
     private ArrayList<Order> orders = new ArrayList<>();
 
+    /**
+     * This constructor creates a new StoreOrders object.
+     */
     public StoreOrders()
     {
 

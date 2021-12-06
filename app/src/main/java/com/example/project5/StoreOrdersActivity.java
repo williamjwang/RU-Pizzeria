@@ -1,7 +1,7 @@
 package com.example.project5;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,11 +11,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import java.lang.reflect.Array;
+import android.widget.Toast;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+/**
+ * This class defines the StoreOrdersActivity of the RU Pizzeria application.
+ * @author William Wang, Joshua Sze
+ */
 public class StoreOrdersActivity extends AppCompatActivity
 {
 
@@ -38,17 +41,22 @@ public class StoreOrdersActivity extends AppCompatActivity
     ArrayAdapter<String> phoneNumberAdapter;
     ArrayAdapter pizzasListAdapter;
 
+    /**
+     * This method sets/updates the pizzas in the pizzasList ListView.
+     * @param position
+     */
     public void setPizzasList(int position)
     {
         pizzaList.clear();
         Order temp = storeOrders.getOrder(position);
-        for (int i = 0; i < temp.getNumPizzas(); i++)
-        {
-            pizzaList.add(temp.getPizza(i).toString());
-        }
+        for (int i = 0; i < temp.getNumPizzas(); i++) { pizzaList.add(temp.getPizza(i).toString()); }
         pizzasListAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * This method calculates/updates the subtotal, sales tax, and order total to match the selected order.
+     * @param position An int
+     */
     public void calculate(int position)
     {
         subtotalTextView.setText("");
@@ -66,6 +74,10 @@ public class StoreOrdersActivity extends AppCompatActivity
         if (orderTotal > 0) orderTotalTextView.setText("$" + d.format(orderTotal));
     }
 
+    /**
+     * This method defines the onCreate method performed when this activity is created.
+     * @param savedInstanceState A Bundle object
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -87,15 +99,8 @@ public class StoreOrdersActivity extends AppCompatActivity
         phoneNumberList = new ArrayList<>();
         pizzaList = new ArrayList<>();
 
-        for (int i = 0; i < storeOrders.getNumOrders(); i++)
-        {
-            phoneNumberList.add(storeOrders.getOrder(i).getPhoneNumber());
-        }
-
-        for (int i = 0; i < storeOrders.getOrder(0).getNumPizzas(); i++)
-        {
-            pizzaList.add(storeOrders.getOrder(0).getPizza(i).toString());
-        }
+        for (int i = 0; i < storeOrders.getNumOrders(); i++) { phoneNumberList.add(storeOrders.getOrder(i).getPhoneNumber()); }
+        for (int i = 0; i < storeOrders.getOrder(0).getNumPizzas(); i++) { pizzaList.add(storeOrders.getOrder(0).getPizza(i).toString()); }
 
         phoneNumberAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, phoneNumberList);
         pizzasListAdapter= new ArrayAdapter(this, android.R.layout.simple_list_item_1, pizzaList);
@@ -108,6 +113,24 @@ public class StoreOrdersActivity extends AppCompatActivity
         calculate(0);
     }
 
+    /**
+     * This method defines the behavior of this Activity after the back button is pressed.
+     */
+    @Override
+    public void onBackPressed()
+    {
+        Intent data = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("order", order);
+        bundle.putSerializable("storeOrders", storeOrders);
+        data.putExtras(bundle);
+        setResult(Activity.RESULT_OK, data);
+        super.onBackPressed();
+    }
+
+    /**
+     * This Listener checks for changes in the order selected.
+     */
     private AdapterView.OnItemSelectedListener phoneNumberClick = new AdapterView.OnItemSelectedListener()
     {
         @Override
@@ -119,17 +142,39 @@ public class StoreOrdersActivity extends AppCompatActivity
         }
 
         @Override
-        public void onNothingSelected(AdapterView<?> parent)
-        {
-
-        }
+        public void onNothingSelected(AdapterView<?> parent) { }
     };
 
+    /**
+     * This method removes the displayed order from the storeOrders.
+     * @param view A View object
+     */
     public void removeOrder(View view)
     {
         int index = storeOrders.find(selectedPhoneNumber);
         storeOrders.removeOrder(index);
-        phoneNumberAdapter.notifyDataSetChanged();
-        pizzasListAdapter.notifyDataSetChanged();
+        if (storeOrders.getNumOrders() != 0)
+        {
+            phoneNumberList.remove(selectedPhoneNumber);
+            phoneNumberAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, phoneNumberList);
+            orderNumberSpinner.setAdapter(phoneNumberAdapter);
+            setPizzasList(0);
+            calculate(0);
+            pizzasListAdapter.notifyDataSetChanged();
+            String orderRemoved = "Order" + selectedPhoneNumber + " successfully removed.";
+            Toast.makeText(this, orderRemoved, Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            String noOrders = "There are no orders!";
+            Toast.makeText(this, noOrders, Toast.LENGTH_SHORT);
+            Intent data = new Intent();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("order", order);
+            bundle.putSerializable("storeOrders", storeOrders);
+            data.putExtras(bundle);
+            setResult(Activity.RESULT_OK, data);
+            super.onBackPressed();
+        }
     }
 }
