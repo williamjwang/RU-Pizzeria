@@ -2,13 +2,134 @@ package com.example.project5;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
-public class StoreOrdersActivity extends AppCompatActivity {
+import java.lang.reflect.Array;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+
+public class StoreOrdersActivity extends AppCompatActivity
+{
+
+    private Order order;
+    private StoreOrders storeOrders;
+    private String selectedPhoneNumber;
+
+    private DecimalFormat d = new DecimalFormat("###,##0.00");
+    private static final double SALES_TAX_RATE = 0.06625;
+
+    Spinner orderNumberSpinner;
+    ListView pizzasList;
+    TextView subtotalTextView;
+    TextView salesTaxTextView;
+    TextView orderTotalTextView;
+    Button cancelOrderButton;
+
+    ArrayList<String> phoneNumberList;
+    ArrayList<String> pizzaList;
+    ArrayAdapter<String> phoneNumberAdapter;
+    ArrayAdapter pizzasListAdapter;
+
+    public void setPizzasList(int position)
+    {
+        pizzaList.clear();
+        Order temp = storeOrders.getOrder(position);
+        for (int i = 0; i < temp.getNumPizzas(); i++)
+        {
+            pizzaList.add(temp.getPizza(i).toString());
+        }
+        pizzasListAdapter.notifyDataSetChanged();
+    }
+
+    public void calculate(int position)
+    {
+        subtotalTextView.setText("");
+        salesTaxTextView.setText("");
+        orderTotalTextView.setText("");
+
+        Order temp = storeOrders.getOrder(position);
+        int numPizzas = temp.getNumPizzas();
+        double subtotal = 0;
+        for (int i = 0; i < numPizzas; i++) { subtotal += temp.getPizza(i).price(); }
+        if (subtotal > 0) subtotalTextView.setText("$" + d.format(subtotal));
+        double salesTax = subtotal * SALES_TAX_RATE;
+        if (salesTax > 0) salesTaxTextView.setText("$" + d.format(salesTax));
+        double orderTotal = subtotal + salesTax;
+        if (orderTotal > 0) orderTotalTextView.setText("$" + d.format(orderTotal));
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_orders);
+        setTitle("Store Orders");
+
+        Intent intent = getIntent();
+        order = (Order) intent.getSerializableExtra("order");
+        storeOrders = (StoreOrders) intent.getSerializableExtra("storeOrders");
+
+        orderNumberSpinner = findViewById(R.id.OrderNumberSpinner);
+        pizzasList = findViewById(R.id.StoreOrdersPizzasList);
+        subtotalTextView = findViewById(R.id.StoreOrdersSubtotalValue);
+        salesTaxTextView = findViewById(R.id.StoreOrdersSalesTaxValue);
+        orderTotalTextView = findViewById(R.id.StoreOrdersOrderTotalValue);
+        cancelOrderButton = findViewById(R.id.CancelOrderButton);
+
+        phoneNumberList = new ArrayList<>();
+        pizzaList = new ArrayList<>();
+
+        for (int i = 0; i < storeOrders.getNumOrders(); i++)
+        {
+            phoneNumberList.add(storeOrders.getOrder(i).getPhoneNumber());
+        }
+
+        for (int i = 0; i < storeOrders.getOrder(0).getNumPizzas(); i++)
+        {
+            pizzaList.add(storeOrders.getOrder(0).getPizza(i).toString());
+        }
+
+        phoneNumberAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, phoneNumberList);
+        pizzasListAdapter= new ArrayAdapter(this, android.R.layout.simple_list_item_1, pizzaList);
+        orderNumberSpinner.setAdapter(phoneNumberAdapter);
+        orderNumberSpinner.setOnItemSelectedListener(phoneNumberClick);
+        pizzasList.setAdapter(pizzasListAdapter);
+
+        selectedPhoneNumber = storeOrders.getOrder(0).getPhoneNumber();
+        setPizzasList(0);
+        calculate(0);
+    }
+
+    private AdapterView.OnItemSelectedListener phoneNumberClick = new AdapterView.OnItemSelectedListener()
+    {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+        {
+            selectedPhoneNumber = (String)orderNumberSpinner.getItemAtPosition(position);
+            setPizzasList(position);
+            calculate(position);
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent)
+        {
+
+        }
+    };
+
+    public void removeOrder(View view)
+    {
+        int index = storeOrders.find(selectedPhoneNumber);
+        storeOrders.removeOrder(index);
+        phoneNumberAdapter.notifyDataSetChanged();
+        pizzasListAdapter.notifyDataSetChanged();
     }
 }

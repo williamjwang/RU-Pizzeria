@@ -59,41 +59,4 @@ public class StoreOrders implements Serializable
      * @param index An int index
      */
     public void removeOrder(int index) { orders.remove(index); }
-
-//    /**
-//     * This method exports the information of all orders in the orders ArrayList.
-//     * @throws IOException An IOException object
-//     */
-//    public void export() throws IOException
-//    {
-//        final DecimalFormat d = = new DecimalFormat("###,##0.00");
-//        FileChooser chooser = new FileChooser();
-//        chooser.setTitle("Open Target File for the Export");
-//        chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"),
-//                new FileChooser.ExtensionFilter("All Files", "*.*"));
-//        Stage stage = new Stage();
-//        File targetFile = chooser.showSaveDialog(stage);
-//        PrintWriter pw = new PrintWriter(targetFile);
-//        pw.println("RU Pizzeria Store Orders");
-//        pw.println();
-//        for (int i = 0; i < orders.size(); i++)
-//        {
-//            Order orderReference = orders.get(i);
-//            pw.println("Order for: " + orderReference.getPhoneNumber());
-//            for (int j = 0; j < orderReference.getNumPizzas(); j++)
-//            {
-//                Pizza pizzaReference = orderReference.getPizza(j);
-//                pw.println(pizzaReference.toString());
-//            }
-//            pw.println("Subtotal: $" + d.format(orderReference.getSubtotal()));
-//            pw.println("Sales Tax: $" + d.format(orderReference.getSalesTax()));
-//            if (i < orders.size() - 1)
-//            {
-//                pw.println("Order Total: $" + d.format(orderReference.getOrderTotal()));
-//                pw.println();
-//            }
-//            else pw.print("Order Total: $" + d.format(orderReference.getOrderTotal()));
-//        }
-//        pw.close();
-//    }
 }

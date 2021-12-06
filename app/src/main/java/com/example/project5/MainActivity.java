@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity
 
     private final int LAUNCH_CUSTOMIZATION = 0;
     private final int LAUNCH_CURRENT_ORDER = 1;
+    private final int LAUNCH_STORE_ORDERS = 2;
 
     private static final int ORDER_PLACED = 0;
     private static final int ORDER_NOT_PLACED = 1;
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity
         else if (storeOrders.find(phoneNumber) != NOT_FOUND)
         {
             result = false;
-            Toast.makeText(this, "Phone number match found. Please enter a different phone number.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Phone number match found, enter a different phone number.", Toast.LENGTH_SHORT).show();
         }
         else
         {
@@ -84,30 +85,20 @@ public class MainActivity extends AppCompatActivity
     {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == LAUNCH_CUSTOMIZATION)
-        {
-            if (resultCode == Activity.RESULT_OK)
-            {
-                currentOrder = (Order) data.getSerializableExtra("order");
-                phoneNumberValue.setText(currentOrder.getPhoneNumber());
-            }
-        }
+        currentOrder = (Order) data.getSerializableExtra("order");
+        storeOrders = (StoreOrders) data.getSerializableExtra("storeOrders");
+
+        if (requestCode == LAUNCH_CUSTOMIZATION) phoneNumberValue.setText(currentOrder.getPhoneNumber());
         else if (requestCode == LAUNCH_CURRENT_ORDER)
         {
             if (resultCode == ORDER_PLACED)
             {
                 newOrder();
-                Toast.makeText(this, "(ON ACTIVITY RESULT) order placed", Toast.LENGTH_SHORT).show();
+                phoneNumberValue.setText("");
             }
-            else if (resultCode == ORDER_NOT_PLACED)
-            {
-                Toast.makeText(this, "(ON ACTIVITY RESULT) order not placed", Toast.LENGTH_SHORT).show();
-                Toast.makeText(this, "back works", Toast.LENGTH_SHORT).show();
-                currentOrder = (Order) data.getSerializableExtra("order");
-                storeOrders = (StoreOrders) data.getSerializableExtra("storeOrders");
-                Toast.makeText(this, "retrieval works", Toast.LENGTH_SHORT).show();
-            }
+            else if (resultCode == ORDER_NOT_PLACED) phoneNumberValue.setText(currentOrder.getPhoneNumber());
         }
+        else if (requestCode == LAUNCH_STORE_ORDERS);
     }
 
 
@@ -115,8 +106,11 @@ public class MainActivity extends AppCompatActivity
     {
         if (!setPhoneNumber()) return;
         Intent intent = new Intent(this, PizzaCustomizationActivity.class);
-        intent.putExtra("pizzaType", pepperoniIndicator);
-        intent.putExtra("order", currentOrder);
+        Bundle bundle = new Bundle();
+        bundle.putInt("pizzaType", pepperoniIndicator);
+        bundle.putSerializable("order", currentOrder);
+        bundle.putSerializable("storeOrders", storeOrders);
+        intent.putExtras(bundle);
         startActivityForResult(intent, LAUNCH_CUSTOMIZATION);
     }
 
@@ -124,8 +118,11 @@ public class MainActivity extends AppCompatActivity
     {
         if (!setPhoneNumber()) return;
         Intent intent = new Intent(this, PizzaCustomizationActivity.class);
-        intent.putExtra("pizzaType", deluxeIndicator);
-        intent.putExtra("order", currentOrder);
+        Bundle bundle = new Bundle();
+        bundle.putInt("pizzaType", deluxeIndicator);
+        bundle.putSerializable("order", currentOrder);
+        bundle.putSerializable("storeOrders", storeOrders);
+        intent.putExtras(bundle);
         startActivityForResult(intent, LAUNCH_CUSTOMIZATION);
     }
 
@@ -133,8 +130,11 @@ public class MainActivity extends AppCompatActivity
     {
         if (!setPhoneNumber()) return;
         Intent intent = new Intent(this, PizzaCustomizationActivity.class);
-        intent.putExtra("pizzaType", hawaiianIndicator);
-        intent.putExtra("order", currentOrder);
+        Bundle bundle = new Bundle();
+        bundle.putInt("pizzaType", hawaiianIndicator);
+        bundle.putSerializable("order", currentOrder);
+        bundle.putSerializable("storeOrders", storeOrders);
+        intent.putExtras(bundle);
         startActivityForResult(intent, LAUNCH_CUSTOMIZATION);
     }
 
@@ -168,6 +168,10 @@ public class MainActivity extends AppCompatActivity
             return;
         }
         Intent intent = new Intent(this, StoreOrdersActivity.class);
-        startActivity(intent);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("order", currentOrder);
+        bundle.putSerializable("storeOrders", storeOrders);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, LAUNCH_STORE_ORDERS);
     }
 }

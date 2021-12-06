@@ -22,6 +22,7 @@ import java.util.Collections;
 public class PizzaCustomizationActivity extends AppCompatActivity
 {
     private Order order;
+    private StoreOrders storeOrders;
     private String selectedSize;
     private double cost;
 
@@ -45,10 +46,9 @@ public class PizzaCustomizationActivity extends AppCompatActivity
 
     Button addToppingButton;
     Button removeToppingButton;
-    Button mainMenuButton;
     Button addPizzaButton;
     Spinner sizeSpinner;
-    EditText subtotalValue;
+    TextView subtotalValue;
 
     ArrayList<String> availableList;
     ArrayList<String> addedList;
@@ -107,7 +107,7 @@ public class PizzaCustomizationActivity extends AppCompatActivity
 
     private void displaySubtotal()
     {
-        subtotalValue.getText().clear();
+        subtotalValue.setText("");
         calculateSubtotal();
         subtotalValue.setText("$" + d.format(cost));
     }
@@ -136,6 +136,7 @@ public class PizzaCustomizationActivity extends AppCompatActivity
 
         Intent intent = getIntent();
         order = (Order) intent.getSerializableExtra("order");
+        storeOrders = (StoreOrders) intent.getSerializableExtra("storeOrders");
         pizzaTypeIndicator = intent.getIntExtra("pizzaType", 0);
         pizzaImage = findViewById(R.id.PizzaImage);
         if (pizzaTypeIndicator == pepperoniIndicator) pizzaImage.setImageResource(R.drawable.pepperoni_pizza);
@@ -155,7 +156,6 @@ public class PizzaCustomizationActivity extends AppCompatActivity
         addToppingButton = findViewById(R.id.AddToppingButton);
         removeToppingButton = findViewById(R.id.RemoveToppingButton);
         subtotalValue = findViewById(R.id.SubtotalValue);
-        mainMenuButton = findViewById((R.id.MainMenuButton));
         addPizzaButton = findViewById(R.id.AddPizzaButton);
 
         availableToppings.setAdapter(availableAdapter);
@@ -171,7 +171,10 @@ public class PizzaCustomizationActivity extends AppCompatActivity
     public void onBackPressed()
     {
         Intent data = new Intent();
-        data.putExtra("order", order);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("order", order);
+        bundle.putSerializable("storeOrders", storeOrders);
+        data.putExtras(bundle);
         setResult(Activity.RESULT_OK, data);
         super.onBackPressed();
     }
@@ -229,7 +232,7 @@ public class PizzaCustomizationActivity extends AppCompatActivity
     public void removeTopping(View view)
     {
         String topping = addedListSelectedItem;
-        if (toppingCount > 0)
+        if (toppingCount > 0 && topping != null)
         {
             availableList.add(topping);
             addedList.remove(topping);
@@ -241,14 +244,6 @@ public class PizzaCustomizationActivity extends AppCompatActivity
             calculateSubtotal();
             displaySubtotal();
         }
-    }
-
-    public void backToMainMenu(View view)
-    {
-        Intent data = new Intent();
-        data.putExtra("order", order);
-        setResult(Activity.RESULT_OK, data);
-        super.onBackPressed();
     }
 
     /**

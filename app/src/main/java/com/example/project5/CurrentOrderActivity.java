@@ -1,8 +1,6 @@
 package com.example.project5;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +10,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -58,7 +55,6 @@ public class CurrentOrderActivity extends AppCompatActivity
         if (salesTax > 0) salesTaxTextView.setText("$" + d.format(salesTax));
         double orderTotal = subtotal + salesTax;
         if (orderTotal > 0) orderTotalTextView.setText("$" + d.format(orderTotal));
-
     }
 
     @Override
@@ -88,14 +84,11 @@ public class CurrentOrderActivity extends AppCompatActivity
         pizzasList.setAdapter(pizzaListAdapter);
         pizzasList.setOnItemClickListener(pizzaClick);
         calculate();
-
-        Toast.makeText(this, "Number of pizzas in order: " + order.getNumPizzas(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onBackPressed()
     {
-        Toast.makeText(this, "Order not placed.", Toast.LENGTH_SHORT).show();
         Intent data = new Intent();
         Bundle bundle = new Bundle();
         bundle.putSerializable("order", order);
