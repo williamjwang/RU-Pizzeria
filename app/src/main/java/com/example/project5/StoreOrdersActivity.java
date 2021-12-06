@@ -161,7 +161,7 @@ public class StoreOrdersActivity extends AppCompatActivity
             setPizzasList(0);
             calculate(0);
             pizzasListAdapter.notifyDataSetChanged();
-            String orderRemoved = "Order" + selectedPhoneNumber + " successfully removed.";
+            String orderRemoved = "Order '" + selectedPhoneNumber + "' successfully removed.";
             Toast.makeText(this, orderRemoved, Toast.LENGTH_SHORT).show();
         }
         else
