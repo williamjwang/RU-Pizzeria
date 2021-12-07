@@ -9,7 +9,9 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 /**
- * Project does not utilize a back button but rather the back button included by Android API
+ * We chose not to define the parent activity name in the manifest file so there
+ * would be no need for a back button. We couldn't figure out how to disable the
+ * back button with the parent activity name defined.
  */
 
 /**
