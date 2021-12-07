@@ -9,6 +9,10 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 /**
+ * Project does not utilize a back button but rather the back button included by Android API
+ */
+
+/**
  * This class defines the MainActivity of the RU Pizzeria application.
  * @author William Wang, Joshua Sze
  */
